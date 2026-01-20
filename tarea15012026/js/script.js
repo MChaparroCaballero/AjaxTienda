@@ -561,7 +561,14 @@ function abrirModal(id, nombre, descripcion, stock, precio) {
    var cantidad= document.getElementById("modalCantidad");
    cantidad.value = 1;
 
-    actualizarPrecioTotal();
+    // Agregamos event listener para actualizar precio cuando cambie la cantidad
+    cantidad.removeEventListener('input', actualizarPrecioTotal);
+    cantidad.addEventListener('input', actualizarPrecioTotal);
+
+   // Inicializamos el precio total
+    var precioTotal = document.getElementById("modalPrecio");
+    precioTotal.innerText = precioUnitarioActual.toFixed(2);
+
 
     // Mostramos el modal quitando la clase d-none
     document.getElementById("modalOverlay").classList.remove("d-none");
@@ -592,7 +599,7 @@ function ajustarCantidad(cambio) {
     // Validaciones: No bajar de 1 y no superar el stock
     if (nuevoValor >= 1 && nuevoValor <= stockActual) {
         input.value = nuevoValor;
-        actualizarPrecioTotal(); // Actualizar el precio total después de cambiar la cantidad
+         input.dispatchEvent(new Event('input')); // Disparar evento para actualizar precio
     } else if (nuevoValor > stockActual) {
         alert("¡No hay suficiente stock! Máximo: " + stockActual);
     }
@@ -795,4 +802,5 @@ function confirmarModalConfirmacion() {
     cerrarModalConfirmacion();
 
 }
+
 
