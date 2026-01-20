@@ -201,7 +201,7 @@ function cargarProductos(elemento, id){
                                         <span class="badge bg-secondary">Stock: ${p.Stock}</span>
                                     </div>
                                     <div class="mt-auto text-center">
-                                        <button class="btn btn-sm btn-success w-100" onclick="abrirModal('${p.CodProd}', '${p.Nombre}', '${p.Descripcion}', ${p.Stock})">Añadir</button>
+                                        <button class="btn btn-sm btn-success w-100" onclick="abrirModal('${p.CodProd}', '${p.Nombre}', '${p.Descripcion}', ${p.Stock}, ${p.Precio})">Añadir</button>
                                     </div>
                                 </div>
                             </div>
@@ -583,7 +583,7 @@ function cerrarModal() {
     productoActualID = null; // Limpiamos variable
 }
 
-// funcion para AJUSTAR CANTIDAD (+ / -)
+// funcion para ajustar la cantidad basicamente que se cambie el precio del modal segun la cantidad lo mismo que con un addeventlistener
 function ajustarCantidad(cambio) {
     let input = document.getElementById("modalCantidad");
     let valorActual = parseInt(input.value);
@@ -795,3 +795,4 @@ function confirmarModalConfirmacion() {
     cerrarModalConfirmacion();
 
 }
+
