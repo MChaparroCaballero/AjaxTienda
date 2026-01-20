@@ -113,6 +113,7 @@ function cerrarSesion() {
                 // Limpiar los campos del formulario
                 document.getElementById("usuario").value = "";
                 document.getElementById("contrasena").value = "";
+                location.reload();
                 
             }
         }
@@ -758,4 +759,5 @@ function confirmarModalConfirmacion() {
         window.callbackConfirmacion();
     }
     cerrarModalConfirmacion();
+
 }
