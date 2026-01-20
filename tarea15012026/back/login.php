@@ -7,6 +7,13 @@ $bd = leer_config();
 function comprobar_usuario($usuario, $contrasena){
     global $bd;
     
+    // Verificar que usuario y contraseña existan y no estén vacíos
+    if (!isset($usuario) || empty($usuario) || !isset($contrasena) || empty($contrasena)) {
+        return FALSE; // Retornar FALSE si faltan datos
+    }
+    
+    $usuario = trim($usuario);
+    
     // Consulta preparada para comprobar usuario y contraseña
     $ins = "select nombre, gmail from usuarios where gmail = ? and clave = ?";
     $stmt = $bd->prepare($ins);
@@ -77,6 +84,14 @@ function iniciar_usuario() {
     $respuesta = [];
 
     try {
+        // Verificar que usuario y clave existan en $_POST y no estén vacíos
+        if (!isset($_POST['usuario']) || empty($_POST['usuario']) || !isset($_POST['clave']) || empty($_POST['clave'])) {
+            $respuesta['login'] = false;
+            $respuesta['mensaje'] = "Usuario y contraseña son requeridos.";
+            echo json_encode($respuesta);
+            exit;
+        }
+        
         //Verificamos las credenciales
         $usu = comprobar_usuario($_POST['usuario'], $_POST['clave']);
 
