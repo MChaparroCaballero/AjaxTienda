@@ -41,6 +41,11 @@ function login(){
                 var botonCerrar = document.getElementById("btnCerrarSesion");
                 botonCerrar.classList.remove("d-none");
                 botonCerrar.style.display = "inline";
+
+                // Mostrar el botón de "Cesta"
+                var botonCesta = document.getElementById("botonCesta");
+                botonCesta.classList.remove("d-none");
+                botonCesta.style.display = "inline";
                 
                 // Mostrar el nombre del usuario
                 var apodo = document.getElementById("datosUsuario");
@@ -109,6 +114,9 @@ function cerrarSesion() {
                 
                 // Ocultar el botón de "Cerrar Sesión"
                 document.getElementById("btnCerrarSesion").classList.add("d-none");
+
+                // Ocultar el botón de "Cesta"
+                document.getElementById("botonCesta").classList.add("d-none");
 
                 // Limpiar los campos del formulario
                 document.getElementById("usuario").value = "";
@@ -242,12 +250,22 @@ function verificarSesion() {
                 var apodo = document.getElementById("datosUsuario");
                 apodo.classList.remove("d-none");
                 apodo.style.display = "inline";
-                apodo.innerHTML = respuesta.nombre;
+                apodo.innerHTML = "Bienvenido " + respuesta.nombre;
                 
                 // Mostrar el botón de "Cerrar Sesión"
                 var botonCerrar = document.getElementById("btnCerrarSesion");
                 botonCerrar.classList.remove("d-none");
                 botonCerrar.style.display = "inline";
+
+                // Mostrar el botón de "Cesta"
+                var botonCesta = document.getElementById("botonCesta");
+                botonCesta.classList.remove("d-none");
+                botonCesta.style.display = "inline";
+                
+                // Si hay productos en la cesta, mostrarla automáticamente
+                if (respuesta.num_productos && respuesta.num_productos > 0) {
+                    mostrarCesta();
+                }
             }
         }
     };
@@ -303,7 +321,7 @@ function cargarProductosPorDefecto(idCategoria) {
                                         <span class="badge bg-secondary">Stock: ${p.Stock}</span>
                                     </div>
                                     <div class="mt-auto text-center">
-                                        <button class="btn btn-sm btn-success w-100" onclick="abrirModal('${p.CodProd}', '${p.Nombre}', '${p.Descripcion}', ${p.Stock})">Añadir</button>
+                                        <button class="btn btn-sm btn-success w-100" onclick="abrirModal('${p.CodProd}', '${p.Nombre}', '${p.Descripcion}', ${p.Stock}, ${p.Precio})">Añadir</button>
                                     </div>
                                 </div>
                             </div>
@@ -526,22 +544,37 @@ function eliminarProductoCarrito(codProd) {
 // Variables globales para saber qué estamos comprando
 let productoActualID = null;
 let stockActual = 0;
+let precioUnitarioActual = 0;
 
 // funcion para abrir EL MODAL
-function abrirModal(id, nombre, descripcion, stock) {
+function abrirModal(id, nombre, descripcion, stock, precio) {
     // Guardamos los datos en variables globales para usarlos luego
     productoActualID = id;
     stockActual = parseInt(stock);
+    precioUnitarioActual = parseFloat(precio);
 
     // Rellenamos el HTML del modal con los datos del producto
     document.getElementById("modalTitulo").innerText = nombre;
     document.getElementById("modalDescripcion").innerText = descripcion;
     
     // Reseteamos la cantidad a 1 siempre que abrimos
-    document.getElementById("modalCantidad").value = 1;
+   var cantidad= document.getElementById("modalCantidad");
+   cantidad.value = 1;
+
+    actualizarPrecioTotal();
 
     // Mostramos el modal quitando la clase d-none
     document.getElementById("modalOverlay").classList.remove("d-none");
+}
+function actualizarPrecioTotal() {
+    var inputCantidad = document.getElementById("modalCantidad");
+    var cantidad = parseInt(inputCantidad.value) || 0; 
+    
+    // Multiplicamos el precio guardado por la cantidad actual
+    var precioTotal = precioUnitarioActual * cantidad;
+    
+    // Actualizamos el texto
+    document.getElementById("modalPrecio").innerText = precioTotal.toFixed(2);
 }
 
 //funcion para CERRAR EL MODAL
@@ -559,6 +592,7 @@ function ajustarCantidad(cambio) {
     // Validaciones: No bajar de 1 y no superar el stock
     if (nuevoValor >= 1 && nuevoValor <= stockActual) {
         input.value = nuevoValor;
+        actualizarPrecioTotal(); // Actualizar el precio total después de cambiar la cantidad
     } else if (nuevoValor > stockActual) {
         alert("¡No hay suficiente stock! Máximo: " + stockActual);
     }
