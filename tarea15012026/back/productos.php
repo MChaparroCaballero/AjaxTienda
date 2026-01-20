@@ -10,7 +10,7 @@ try {
 
     if ($codCat) {
         // Consulta para obtener los productos de la categoría dada
-        $ins = "SELECT CodProd, Nombre, Descripcion, Stock FROM productos WHERE CodCat = ?";
+        $ins = "SELECT CodProd, Nombre, Descripcion, Stock, Precio FROM productos WHERE CodCat = ?";
         $stmt = $bd->prepare($ins);
         $stmt->execute([$codCat]);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -24,4 +24,5 @@ try {
     echo json_encode(["error" => $e->getMessage()]);
 }
 exit;
+
 ?>
