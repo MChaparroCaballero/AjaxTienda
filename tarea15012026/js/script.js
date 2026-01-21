@@ -187,6 +187,7 @@ function cargarProductos(elemento, id){
 
                 // Crear una tarjeta (card) para cada producto
                 productos.forEach(p => {
+                    var precioFormato = parseFloat(p.Precio).toFixed(2);
                     var rutaImagen = '../img/' + p.CodProd + '.png';
                     contenedor.innerHTML += `
                         <div class="col-md-4 mb-4">
@@ -199,6 +200,7 @@ function cargarProductos(elemento, id){
                                     <hr>
                                     <div class="mb-3">
                                         <span class="badge bg-secondary">Stock: ${p.Stock}</span>
+                                        <span class="badge bg-primary ms-2">Precio: ${precioFormato}€</span>
                                     </div>
                                     <div class="mt-auto text-center">
                                         <button class="btn btn-sm btn-success w-100" onclick="abrirModal('${p.CodProd}', '${p.Nombre}', '${p.Descripcion}', ${p.Stock}, ${p.Precio})">Añadir</button>
@@ -307,6 +309,7 @@ function cargarProductosPorDefecto(idCategoria) {
 
                 // Crear una tarjeta (card) para cada producto
                 productos.forEach(p => {
+                    var precioFormato = parseFloat(p.Precio).toFixed(2);
                     var rutaImagen = '../img/' + p.CodProd + '.png';
                     contenedor.innerHTML += `
                         <div class="col-md-4 mb-4">
@@ -319,6 +322,7 @@ function cargarProductosPorDefecto(idCategoria) {
                                     <hr>
                                     <div class="mb-3">
                                         <span class="badge bg-secondary">Stock: ${p.Stock}</span>
+                                        <span class="badge bg-primary ms-2">Precio: ${precioFormato}€</span>
                                     </div>
                                     <div class="mt-auto text-center">
                                         <button class="btn btn-sm btn-success w-100" onclick="abrirModal('${p.CodProd}', '${p.Nombre}', '${p.Descripcion}', ${p.Stock}, ${p.Precio})">Añadir</button>
@@ -802,5 +806,6 @@ function confirmarModalConfirmacion() {
     cerrarModalConfirmacion();
 
 }
+
 
 
